@@ -1,4 +1,4 @@
-package SentimentAnalyzer;
+package sentimentanalyzer;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -12,7 +12,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 

@@ -1,5 +1,4 @@
-package SentimentAnalyzer;
-
+package sentimentanalyzer;
 import java.util.List;
 import java.util.Properties;
 
@@ -47,6 +46,7 @@ public class StanfordSA {
 	  StanfordSA SA = new StanfordSA();
 	  //input is in per tweet
 	  String tweet = "He is a happy person.";
+	  //generate sentiment
 	  System.out.println(SA.getSentiment(tweet));
 	}
 }
