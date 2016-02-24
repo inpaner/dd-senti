@@ -12,7 +12,7 @@ import db.DAOUtil;
 import twitter4j.Status;
 
 public class TweetManager {
-    DAOFactory factory;
+    private DAOFactory factory;
     
     
     public TweetManager() {
@@ -29,9 +29,6 @@ public class TweetManager {
     		"SET text = ? " +
     		"WHERE id = ? ";
     
-    private static final String SQL_RETRIEVE = 
-            "SELECT id, username, text, date, latitude, longitude, keyword_fk " +
-            " FROM Tweets ";
     
     private static final String SQL_GET_BY_KEYWORD = 
             "SELECT id, username, text, date, latitude, longitude, keyword_fk " +

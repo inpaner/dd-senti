@@ -23,22 +23,22 @@ import db.DAOFactory;
 import db.DAOUtil;
 
 public class KeywordManager {
-
-	DAOFactory factory;
+	private DAOFactory factory;
     
     
     public KeywordManager() {
         factory = DAOFactory.getInstance();
     }
     
+    
     private static final String SQL_CREATE = 
-            "INSERT INTO Keywords(word) " +
-            " VALUES (?) ";
+        "INSERT INTO Keywords(word) " +
+        " VALUES (?) ";
     
      
     private static final String SQL_RETRIEVE = 
-            "SELECT word" +
-            " FROM Keywords ";
+        "SELECT word " +
+        " FROM Keywords ";
     
     
     public List<String> retrieveAll() {
@@ -50,41 +50,34 @@ public class KeywordManager {
         try {
             conn = factory.getConnection();
             ps = DAOUtil.prepareStatement(conn, SQL_RETRIEVE, false, values);
-            
             rs = ps.executeQuery();
             
             while (rs.next()) {
                 String keyword = rs.getString("word");
                 result.add(keyword);
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             DAOUtil.close(conn, ps, rs);
         }
         return result;
     }
     
-    
-    public void createAll(String keyword) {        
+
+    public void addKeyword(String keyword) {        
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            conn = factory.getConnection();
-                                   
-                Object[] values = {
-                        keyword
-                };
-                ps = DAOUtil.prepareStatement(conn, SQL_CREATE, false, values);
-                ps.executeUpdate();
-            
-        }
-        catch (SQLException e) {
+            conn = factory.getConnection();                               
+            Object[] values = {
+                keyword
+            };
+            ps = DAOUtil.prepareStatement(conn, SQL_CREATE, false, values);
+            ps.executeUpdate();
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             DAOUtil.close(conn, ps);
         }
     }
@@ -97,8 +90,7 @@ public class KeywordManager {
                 rs.getInt("id"),
                 rs.getString("keyword")
             );
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         
