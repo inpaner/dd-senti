@@ -5,6 +5,12 @@ public class Keyword {
 	private String word;
 	
 	
+	public Keyword(int id, String word) {
+		this.id = id;
+		this.word = word;
+	}
+
+
 	public int getId() {
 		return id;
 	}

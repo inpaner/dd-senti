@@ -1,7 +1,11 @@
 package twitter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -29,9 +33,14 @@ public class Crawler {
     public static final String OAUTH_ACCESS_TOKEN = "461053984-aww1IbpSVcxUE2jN8VqsOkEw8IQeEMusx4IdPM9p";
     public static final String OAUTH_ACCESS_TOKEN_SECRET = "WGsbat8P8flqKqyAymnWnTnAGI5hZkgdaQSE8XALs7ZEp";
     
+    public KeywordManager keywordmanager = new KeywordManager();
+    public TweetManager tweetmanager = new TweetManager();
     
-	public void addKeyword(String word) {
-		// add keyword to db
+	public void addKeywords(String words) {
+		List<String> keywords = Arrays.asList(words.split(","));
+		for(String word: keywords){
+			keywordmanager.createAll(word);	
+		}
 	}
 	
 	
@@ -41,8 +50,19 @@ public class Crawler {
 		
 		// get keywords from db
 		// actually crawl for each	
-	}
-	
+		
+		Runnable crawling = new Runnable() {
+		    public void run() {
+		    	for(String word: getKeywords()){
+		    		tweetmanager.createAll(mine(word), word);
+		    		}
+		    }
+		};
+
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(crawling, 0, 60, TimeUnit.MINUTES);
+				
+		}
 	
     /**
      * Usage: java twitter4j.examples.search.SearchTweets [query]
@@ -92,7 +112,7 @@ public class Crawler {
 	
     
 	public List<String> getKeywords() {
-		// from db
-		return null;
+		List<String> keywords = keywordmanager.retrieveAll();
+		return keywords;
 	}
 }
