@@ -47,9 +47,9 @@ public class Crawler {
     /**
      * Usage: java twitter4j.examples.search.SearchTweets [query]
      *
-     * @param toSearch  
+     * @param keyword  
      */
-    public List<Status> mine(String toSearch) {
+    public List<Status> mine(String keyword) {
         List<Status> results = new ArrayList<Status>();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -61,7 +61,7 @@ public class Crawler {
         Twitter twitter = tf.getInstance();
  
         try {           
-            Query query = new Query(toSearch);
+            Query query = new Query(keyword);
             query.setCount(SEARCH_COUNT);
             if (!SEARCH_SINCE.isEmpty()) {
             	query.setSince(SEARCH_SINCE);
@@ -89,10 +89,4 @@ public class Crawler {
         }
         return results;
     }
-	
-    
-	public List<String> getKeywords() {
-		// from db
-		return null;
-	}
 }

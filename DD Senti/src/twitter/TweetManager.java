@@ -29,33 +29,34 @@ public class TweetManager {
     		"SET text = ? " +
     		"WHERE id = ? ";
     
-    
     private static final String SQL_RETRIEVE = 
             "SELECT id, username, text, date, latitude, longitude, keyword_fk " +
             " FROM Tweets ";
     
+    private static final String SQL_GET_BY_KEYWORD = 
+            "SELECT id, username, text, date, latitude, longitude, keyword_fk " +
+            " FROM Tweets " +
+            " WHERE keyword_fk = ? ";
     
-    public List<Tweet> retrieveAll() {
+    
+    public List<Tweet> getAllByKeyword(String keyword) {
         List<Tweet> result = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Object[] values = {};
+        Object[] values = {keyword};
         try {
             conn = factory.getConnection();
-            ps = DAOUtil.prepareStatement(conn, SQL_RETRIEVE, false, values);
-            
+            ps = DAOUtil.prepareStatement(conn, SQL_GET_BY_KEYWORD, false, values);        
             rs = ps.executeQuery();
             
             while (rs.next()) {
                 Tweet tweet = map(rs);
                 result.add(tweet);
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             DAOUtil.close(conn, ps, rs);
         }
         return result;
@@ -95,11 +96,9 @@ public class TweetManager {
                 ps = DAOUtil.prepareStatement(conn, SQL_CREATE, false, values);
                 ps.executeUpdate();
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             DAOUtil.close(conn, ps);
         }
     }

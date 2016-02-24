@@ -1,5 +1,11 @@
 package twitter;
 
-public class KeywordManager {
+import java.util.List;
 
+public class KeywordManager {
+	
+	public List<String> getAll() {
+		// from db
+		return null;
+	}
 }
