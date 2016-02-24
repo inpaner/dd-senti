@@ -11,7 +11,8 @@ public class Api {
 //		api.testKeywordManager();
 //		api.testCrawler();
 //		api.analyzeTweets("cybersecurity");
-		api.directAnalyzeTweets("cybersecurity");
+//		api.directAnalyzeTweets("cybersecurity");
+		api.runCrawler();
 	}
 	
 	

@@ -2,6 +2,7 @@ package twitter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,9 +23,9 @@ import twitter4j.conf.ConfigurationBuilder;
 public class Crawler {
 	private final boolean DEBUG = true;
 	
-	private final int LOOP_RATE_IN_MINS = 60;
+	private final int LOOP_RATE_IN_MINS = 480;
 	
-	private final int SEARCH_COUNT = 1000;
+	private final int SEARCH_COUNT = 200;
 	private final String SEARCH_SINCE = ""; // "2015-10-13";
 	private final String SEARCH_UNTIL = "";
 	
@@ -45,12 +46,20 @@ public class Crawler {
 	}
 	
 	public void runOnce() {
+		if (DEBUG) {
+			java.util.Date date = new Date();
+			System.out.println("Running crawler at " + date.toString());
+		}
+			
 		KeywordManager keywordmanager = new KeywordManager();
     	TweetManager tweetmanager = new TweetManager();
     	for (String word : keywordmanager.getAll()) {
+    		if (DEBUG) 
+    			System.out.println("Mining: " + word);
     		List<Status> tweets = this.mine(word);
     		tweetmanager.createAll(tweets, word);
 		}
+    	System.out.println("\n\n");
 	}
 	
     /**
@@ -84,11 +93,11 @@ public class Crawler {
                 result = twitter.search(query);
                 List<Status> tweets = result.getTweets();
                 results.addAll(result.getTweets());
-                if (DEBUG) {
+                /* if (DEBUG) {
                 	for (Status tweet : tweets) {
                         System.out.println(tweet.getId() + " @ " + tweet.getUser().getScreenName() + " - " + tweet.getText());
                     }	
-                }
+                } */ 
             } while ((query = result.nextQuery()) != null);
         
         } catch (TwitterException e) {
