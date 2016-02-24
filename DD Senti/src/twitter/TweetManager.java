@@ -20,19 +20,19 @@ public class TweetManager {
     }
     
     private static final String SQL_CREATE = 
-            "INSERT INTO Tweet(id, username, text, date, latitude, longitude, keyword_fk) " +
+            "INSERT INTO Tweets(id, username, text, date, latitude, longitude, keyword_fk) " +
             " VALUES (?, ?, ?, ?, ?, ?, ?) ";
     
     
     private static final String SQL_UPDATE = 
-            "UPDATE Tweet " +
+            "UPDATE Tweets " +
     		"SET text = ? " +
     		"WHERE id = ? ";
     
     
     private static final String SQL_RETRIEVE = 
             "SELECT id, username, text, date, latitude, longitude, keyword_fk " +
-            " FROM Tweet ";
+            " FROM Tweets ";
     
     
     public List<Tweet> retrieveAll() {
