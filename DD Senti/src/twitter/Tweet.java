@@ -70,4 +70,10 @@ public class Tweet {
     public String getKeyword() {
         return keyword;
     }
+    
+    
+    @Override
+    public String toString() {
+    	return "@" + this.getUsername() + " - " + this.getText();
+    }
 }

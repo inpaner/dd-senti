@@ -9,16 +9,23 @@ public class Api {
 	public static void main(String[] args) {
 		Api api = new Api();
 //		api.testKeywordManager();
-		api.testCrawler();
+//		api.testCrawler();
+//		api.analyzeTweets("cybersecurity");
+		api.directAnalyzeTweets("cybersecurity");
 	}
 	
 	
-	public void analyzeTweets(String keywordsCsv) {
+	private void internalAnalyzeTweets(String keywordsCsv, boolean crawl) {
 		String[] keywords = keywordsCsv.split(",");
 		
 		KeywordManager keywordmanager = new KeywordManager();
 		for (String word : keywords) {
 			keywordmanager.addKeyword(word);
+		}
+		
+		if (crawl) {
+			Crawler crawler = new Crawler();
+			crawler.runOnce();	
 		}
 		
 		TweetManager manager = new TweetManager();
@@ -29,10 +36,37 @@ public class Api {
 		
 		// preprocess tweets
 		// feed into senti analyzer
+		for (Tweet tweet : tweets) {
+			System.out.println(tweet);
+		}
 	}
 	
-	/* Tests */
 	
+	/**
+	 * Performs one initial crawl then analyzes all tweets.
+	 * @param keywordsCsv
+	 */
+	public void analyzeTweets(String keywordsCsv) {
+		this.internalAnalyzeTweets(keywordsCsv, true);
+	}
+	
+	
+	/**
+	 * Analyzes all tweets without performing an initial crawl.
+	 * @param keywordsCsv
+	 */
+	public void directAnalyzeTweets(String keywordsCsv) {
+		this.internalAnalyzeTweets(keywordsCsv, false);
+	}
+	
+	
+	public void runCrawler() {
+		Crawler crawler = new Crawler();
+		crawler.run();
+	}
+	
+	
+	/* Tests */
 	private void testKeywordManager() {
 		String keywordsCsv = "burger, chocolate, donut, almond";
 		String[] keywords = keywordsCsv.split(",");
@@ -41,6 +75,10 @@ public class Api {
 		for (String word : keywords) {
 			keywordmanager.addKeyword(word);
 		}
+		
+		System.out.println(keywordmanager.getAll());
+		
+		keywordmanager.getAll();
 	}
 	
 	

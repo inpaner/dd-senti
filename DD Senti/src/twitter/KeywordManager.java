@@ -41,7 +41,7 @@ public class KeywordManager {
 			" FROM Keywords ";
     
     
-    public List<String> retrieveAll() {
+    public List<String> getAll() {
         List<String> result = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;

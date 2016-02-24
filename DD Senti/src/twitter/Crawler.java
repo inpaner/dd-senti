@@ -24,7 +24,7 @@ public class Crawler {
 	
 	private final int LOOP_RATE_IN_MINS = 60;
 	
-	private final int SEARCH_COUNT = 10000;
+	private final int SEARCH_COUNT = 1000;
 	private final String SEARCH_SINCE = ""; // "2015-10-13";
 	private final String SEARCH_UNTIL = "";
 	
@@ -37,16 +37,20 @@ public class Crawler {
 	public void run() {
 		Runnable crawling = new Runnable() {
 		    public void run() {
-		    	KeywordManager keywordmanager = new KeywordManager();
-		    	TweetManager tweetmanager = new TweetManager();
-		    	for (String word : keywordmanager.retrieveAll()) {
-		    		List<Status> tweets = Crawler.this.mine(word);
-		    		tweetmanager.createAll(tweets, word);
-	    		}
+		    	Crawler.this.runOnce();
 		    }
 		};
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(crawling, 0, LOOP_RATE_IN_MINS, TimeUnit.MINUTES);			
+	}
+	
+	public void runOnce() {
+		KeywordManager keywordmanager = new KeywordManager();
+    	TweetManager tweetmanager = new TweetManager();
+    	for (String word : keywordmanager.getAll()) {
+    		List<Status> tweets = this.mine(word);
+    		tweetmanager.createAll(tweets, word);
+		}
 	}
 	
     /**

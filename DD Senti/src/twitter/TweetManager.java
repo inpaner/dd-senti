@@ -111,7 +111,7 @@ public class TweetManager {
                 rs.getString("date"),
                 rs.getString("latitude"),
                 rs.getString("longitude"),
-                rs.getString("keyword")
+                rs.getString("keyword_fk")
             );
         }
         catch (SQLException e) {
