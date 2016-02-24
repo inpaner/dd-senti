@@ -20,56 +20,41 @@ import twitter4j.conf.ConfigurationBuilder;
  * @since Twitter4J 2.1.7
  */
 public class Crawler {
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 	
-	public static final int SEARCH_COUNT = 10000;
-	//public static final String SEARCH_SINCE = "2015-10-01"; 
-	public static final String SEARCH_SINCE = "";
-	//public static final String SEARCH_UNTIL = "2015-10-13";
-	public static final String SEARCH_UNTIL = "";
+	private final int LOOP_RATE_IN_MINS = 60;
 	
-    public static final String CONSUMER_KEY = "fwbtkGf8N97yyUZyH5YzLw";
-    public static final String CONSUMER_SECRET = "oQA5DunUy89Co5Hr7p4O2WmdzqiGTzssn2kMphKc8g";
-    public static final String OAUTH_ACCESS_TOKEN = "461053984-aww1IbpSVcxUE2jN8VqsOkEw8IQeEMusx4IdPM9p";
-    public static final String OAUTH_ACCESS_TOKEN_SECRET = "WGsbat8P8flqKqyAymnWnTnAGI5hZkgdaQSE8XALs7ZEp";
-    
-    public KeywordManager keywordmanager = new KeywordManager();
-    public TweetManager tweetmanager = new TweetManager();
-    
-	public void addKeywords(String words) {
-		List<String> keywords = Arrays.asList(words.split(","));
-		for(String word: keywords){
-			keywordmanager.createAll(word);	
-		}
-	}
+	private final int SEARCH_COUNT = 10000;
+	private final String SEARCH_SINCE = ""; // "2015-10-13";
+	private final String SEARCH_UNTIL = "";
+	
+	private final String CONSUMER_KEY = "fwbtkGf8N97yyUZyH5YzLw";
+	private final String CONSUMER_SECRET = "oQA5DunUy89Co5Hr7p4O2WmdzqiGTzssn2kMphKc8g";
+	private final String OAUTH_ACCESS_TOKEN = "461053984-aww1IbpSVcxUE2jN8VqsOkEw8IQeEMusx4IdPM9p";
+	private final String OAUTH_ACCESS_TOKEN_SECRET = "WGsbat8P8flqKqyAymnWnTnAGI5hZkgdaQSE8XALs7ZEp";
 	
 	
 	public void run() {
-		// thread ba to
-		// loop lang
-		
-		// get keywords from db
-		// actually crawl for each	
-		
 		Runnable crawling = new Runnable() {
 		    public void run() {
-		    	for(String word: getKeywords()){
-		    		tweetmanager.createAll(mine(word), word);
-		    		}
+		    	KeywordManager keywordmanager = new KeywordManager();
+		    	TweetManager tweetmanager = new TweetManager();
+		    	for (String word : keywordmanager.retrieveAll()) {
+		    		List<Status> tweets = Crawler.this.mine(word);
+		    		tweetmanager.createAll(tweets, word);
+	    		}
 		    }
 		};
-
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(crawling, 0, 60, TimeUnit.MINUTES);
-				
-		}
+		executor.scheduleAtFixedRate(crawling, 0, LOOP_RATE_IN_MINS, TimeUnit.MINUTES);			
+	}
 	
     /**
      * Usage: java twitter4j.examples.search.SearchTweets [query]
      *
      * @param keyword  
      */
-    public List<Status> mine(String keyword) {
+    List<Status> mine(String keyword) {
         List<Status> results = new ArrayList<Status>();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -101,19 +86,14 @@ public class Crawler {
                     }	
                 }
             } while ((query = result.nextQuery()) != null);
+        
         } catch (TwitterException e) {
             e.printStackTrace();
             System.out.println("Failed to search tweets: " + e.getMessage());
+        
         } catch(Exception e){
             e.printStackTrace();
         }
         return results;
     }
-
-	
-    
-	public List<String> getKeywords() {
-		List<String> keywords = keywordmanager.retrieveAll();
-		return keywords;
-	}
 }

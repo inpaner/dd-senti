@@ -32,13 +32,13 @@ public class KeywordManager {
     
     
     private static final String SQL_CREATE = 
-        "INSERT INTO Keywords(word) " +
-        " VALUES (?) ";
+    		"INSERT INTO Keywords(word) " +
+			" VALUES (?) ";
     
      
     private static final String SQL_RETRIEVE = 
-        "SELECT word " +
-        " FROM Keywords ";
+    		"SELECT word " +
+			" FROM Keywords ";
     
     
     public List<String> retrieveAll() {
@@ -65,7 +65,8 @@ public class KeywordManager {
     }
     
 
-    public void addKeyword(String keyword) {        
+    public void addKeyword(String keyword) {
+    	keyword = keyword.trim().toLowerCase();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
