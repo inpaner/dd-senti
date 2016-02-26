@@ -12,8 +12,14 @@ public class PreprocessorManager {
 	 * 4. Remove Stop Words
 	 */
 	
-	private StanfordLemmatizer slemmatizer = new StanfordLemmatizer();
-	private StopWordsRemover swRemover = new StopWordsRemover();
+	private StanfordLemmatizer slemmatizer;
+	private StopWordsRemover swRemover;
+	
+	public PreprocessorManager () {
+		//Initialize APIs
+		slemmatizer = new StanfordLemmatizer();
+		swRemover = new StopWordsRemover();
+	}
 	
 	public String preprocess(String line) {
 		line = line.toLowerCase();
@@ -21,6 +27,7 @@ public class PreprocessorManager {
 		line = removeRepeatingLetters(line);
 		line = lemmatizer(line);		
 		line = swRemover.removeStopWords(line);
+		line = symbolsRemover(line);
 		
 		return line;
 	}
@@ -30,7 +37,12 @@ public class PreprocessorManager {
 		return line.replaceAll("((www\\.[\\s]+)|(https?://[^\\s]+)|(http?://[^\\s]+))", "")
 				.replaceAll("[\\s]+", " ")
 				.replaceAll("@[^\\s]+", "")
-				.replaceAll("[@&)+-=$!/?#(*:;'~`.0-9%><“”…|^_]", "");
+				.replace("rt", "");
+	}
+	
+	// Once everything is done, remove all symbols
+	private String symbolsRemover(String line) {
+		return line.replaceAll("[@&)+-=$!/?#(*:;'~`.0-9%><“”…|^_]", "");
 	}
 	
 	
