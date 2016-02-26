@@ -37,12 +37,17 @@ public class PreprocessorManager {
 		return line.replaceAll("((www\\.[\\s]+)|(https?://[^\\s]+)|(http?://[^\\s]+))", "")
 				.replaceAll("[\\s]+", " ")
 				.replaceAll("@[^\\s]+", "")
-				.replace("rt", "");
+				.replace("rt", "")
+				.replace("[", "")
+				.replace("]", "")
+				.replace("\\", "")
+				.replaceAll("[�]", "");
 	}
 	
 	// Once everything is done, remove all symbols
 	private String symbolsRemover(String line) {
-		return line.replaceAll("[@&)+-=$!/?#(*:;'~`.0-9%><���|^_]", "");
+		return line.replaceAll("[@&)+-=$!/?#(*:;'´~`.0-9%><“”…|^_]", "")
+				   .replaceAll("\\s+", " ");
 	}
 	
 	
