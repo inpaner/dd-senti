@@ -2,5 +2,19 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="lib/core NLP/ejml-0.23.jar" sourcepath="lib/core NLP/ejml-0.23-src.zip"/>
+	<classpathentry kind="lib" path="lib/core NLP/javax.json.jar" sourcepath="lib/core NLP/javax.json-api-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/joda-time.jar" sourcepath="lib/core NLP/joda-time-2.9-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/jollyday.jar" sourcepath="lib/core NLP/jollyday-0.4.7-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/protobuf.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-models.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0.jar" sourcepath="lib/core NLP/stanford-corenlp-3.6.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DD%20Senti/lib/core%20NLP/stanford-corenlp-3.6.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/core NLP/xom.jar" sourcepath="lib/core NLP/xom-1.2.10-src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
