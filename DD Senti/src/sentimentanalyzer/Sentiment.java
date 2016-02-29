@@ -1,10 +1,11 @@
 package sentimentanalyzer;
 
 public enum Sentiment {
-	
 	POSITIVE("Positive"), 
 	NEGATIVE("Negative"),
 	NEUTRAL("Neutral");
+	
+	private final String value;
 	
 	static final Sentiment getSentiment(String value) {
 		Sentiment result = Sentiment.NEUTRAL;
@@ -17,8 +18,6 @@ public enum Sentiment {
 		
 		return result;
 	}
-	
-	private final String value;
 	
 	
 	Sentiment(String value) {

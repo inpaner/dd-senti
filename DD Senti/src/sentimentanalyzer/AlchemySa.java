@@ -22,15 +22,6 @@ public class AlchemySa implements SentiAnalyzerI {
     private final String ANALYZER_NAME = "Alchemy";
     private AlchemyAPI alchemyApi;
     
-	
-    AlchemySa() {
-    	try {
-			 alchemyApi = AlchemyAPI.GetInstanceFromFile(CONFIG_FILE);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-    }
-    
     public static void main(String[] args) {
 		new AlchemySa().test();
 	}    
@@ -44,11 +35,19 @@ public class AlchemySa implements SentiAnalyzerI {
     }
     
     
-    @Override
+    AlchemySa() {
+		try {
+			 alchemyApi = AlchemyAPI.GetInstanceFromFile(CONFIG_FILE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+
+    
+	@Override
 	public SaResult getSentiment(String text) {
 		double score = 0.0;
-		Sentiment sentiment = Sentiment.NEUTRAL;  
-		
+		Sentiment sentiment = Sentiment.NEUTRAL;  	
 		try {	
 			// Extract sentiment for a text string.
 			Document doc = alchemyApi.TextGetTextSentiment(text);
@@ -65,16 +64,18 @@ public class AlchemySa implements SentiAnalyzerI {
 		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-	    
 		return new SaResult(sentiment, score);
 	}
 
+	
+	@Override
     public String getAnalyzerName() {
     	return ANALYZER_NAME;
     }
+
     
 	// utility method
-    private static String getStringFromDocument(Document doc) {
+    private String getStringFromDocument(Document doc) {
         try {
             DOMSource domSource = new DOMSource(doc);
             StringWriter writer = new StringWriter();

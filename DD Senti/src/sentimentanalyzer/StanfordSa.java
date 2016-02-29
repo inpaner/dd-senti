@@ -24,7 +24,7 @@ public class StanfordSa implements SentiAnalyzerI {
 	}
 	
 	
-	public StanfordSa(){
+	StanfordSa(){
 	    Properties props = new Properties();
 	    props.put("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment");
 		stanfordApi = new StanfordCoreNLP(props);
@@ -34,13 +34,11 @@ public class StanfordSa implements SentiAnalyzerI {
 	public SaResult getSentiment(String text){
 		Annotation annotation = new Annotation(text);
 	    stanfordApi.annotate(annotation);
-	    List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-	    
+	    List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);    
 	    String sentimentStr = "";
 	    for (CoreMap sentence : sentences) {
 	    	sentimentStr = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
 	    }
-	    
 	    Sentiment sentiment = Sentiment.getSentiment(sentimentStr);
 	    return new SaResult(sentiment, 0.0);
 	}

@@ -20,6 +20,7 @@ public class SaResult {
 	}
 	
 	
+	@Override
 	public String toString() {
 		return sentiment.toString();
 	}
