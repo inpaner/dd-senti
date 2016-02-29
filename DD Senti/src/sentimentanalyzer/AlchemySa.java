@@ -25,7 +25,8 @@ public class AlchemySa implements SentiAnalyzerI {
 	}    
     
     private void test() {
-    	SaResult result = this.getSentiment("That hat is ridiculous, Charles.");
+//    	SaResult result = this.getSentiment("That hat is ridiculous, Charles.");
+    	SaResult result = this.getSentiment("I have to come back.");
     	System.out.println("Sentiment: " + result.getSentiment());
     	System.out.println("Score: " + result.getScore());
     }
@@ -34,7 +35,7 @@ public class AlchemySa implements SentiAnalyzerI {
     @Override
 	public SaResult getSentiment(String text) {
 		double score = 0.0;
-		Sentiment sentiment = Sentiment.NEGATIVE;  
+		Sentiment sentiment = Sentiment.NEUTRAL;  
 		
 		try {
 			// Create an AlchemyAPI object.
@@ -52,6 +53,8 @@ public class AlchemySa implements SentiAnalyzerI {
 	        		sentiment = Sentiment.getSentiment(sentimentVal);
 	        	}
 	        }
+			
+			System.out.println(AlchemySa.getStringFromDocument(doc));
 		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}

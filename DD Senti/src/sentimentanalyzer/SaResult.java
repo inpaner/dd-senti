@@ -13,12 +13,7 @@ public class SaResult {
 	public Sentiment getSentiment() {
 		return sentiment;
 	}
-	
-	
-	public boolean isPositive() {
-		return sentiment.equals(Sentiment.POSITIVE);
-	}
-	
+		
 	
 	public double getScore() {
 		return score;
