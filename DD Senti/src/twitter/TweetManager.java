@@ -22,13 +22,7 @@ public class TweetManager {
     private static final String SQL_CREATE = 
             "INSERT INTO Tweets(id, username, text, date, latitude, longitude, keyword_fk) " +
             " VALUES (?, ?, ?, ?, ?, ?, ?) ";
-    
-    
-    private static final String SQL_UPDATE = 
-            "UPDATE Tweets " +
-    		"SET text = ? " +
-    		"WHERE id = ? ";
-    
+
     
     private static final String SQL_GET_BY_KEYWORD = 
             "SELECT id, username, text, date, latitude, longitude, keyword_fk " +

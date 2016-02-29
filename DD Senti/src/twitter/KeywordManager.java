@@ -36,7 +36,7 @@ public class KeywordManager {
 			" VALUES (?) ";
     
      
-    private static final String SQL_RETRIEVE = 
+    private static final String SQL_GET = 
     		"SELECT word " +
 			" FROM Keywords ";
     
@@ -49,7 +49,7 @@ public class KeywordManager {
         Object[] values = {};
         try {
             conn = factory.getConnection();
-            ps = DAOUtil.prepareStatement(conn, SQL_RETRIEVE, false, values);
+            ps = DAOUtil.prepareStatement(conn, SQL_GET, false, values);
             rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -81,20 +81,5 @@ public class KeywordManager {
         } finally {
             DAOUtil.close(conn, ps);
         }
-    }
-    
-    
-    private Keyword map(ResultSet rs) {
-        Keyword result = null;
-        try {
-            result = new Keyword(
-                rs.getInt("id"),
-                rs.getString("keyword")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        return result;
     }
 }

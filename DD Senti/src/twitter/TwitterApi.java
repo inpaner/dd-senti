@@ -5,9 +5,9 @@ import java.util.List;
 
 import twitter4j.Status;
 
-public class Api {
+public class TwitterApi {
 	public static void main(String[] args) {
-		Api api = new Api();
+		TwitterApi api = new TwitterApi();
 //		api.testKeywordManager();
 //		api.testCrawler();
 //		api.analyzeTweets("cybersecurity");
