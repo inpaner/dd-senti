@@ -24,6 +24,7 @@ public class AlchemySa implements SentiAnalyzerI {
 		new AlchemySa().test();
 	}    
     
+    
     private void test() {
 //    	SaResult result = this.getSentiment("That hat is ridiculous, Charles.");
     	SaResult result = this.getSentiment("I have to come back.");
@@ -44,7 +45,7 @@ public class AlchemySa implements SentiAnalyzerI {
 			// Extract sentiment for a text string.
 			Document doc = alchemyObj.TextGetTextSentiment(text);
 			NodeList list = doc.getElementsByTagName("docSentiment").item(0).getChildNodes();
-	        
+			
 			for (int i = 0; i < list.getLength(); i++) {
 	        	if (list.item(i).getNodeName().equals("score")) {
 	        		score = Double.valueOf( list.item(i).getTextContent() );
@@ -53,8 +54,6 @@ public class AlchemySa implements SentiAnalyzerI {
 	        		sentiment = Sentiment.getSentiment(sentimentVal);
 	        	}
 	        }
-			
-			System.out.println(AlchemySa.getStringFromDocument(doc));
 		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
