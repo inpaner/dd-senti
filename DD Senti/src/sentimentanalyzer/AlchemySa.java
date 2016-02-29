@@ -19,7 +19,18 @@ import com.alchemyapi.api.AlchemyAPI;
 
 public class AlchemySa implements SentiAnalyzerI {
     private final String CONFIG_FILE = "src/com/alchemyapi/api/api_key.txt";
+    private final String ANALYZER_NAME = "Alchemy";
+    private AlchemyAPI alchemyApi;
+    
 	
+    AlchemySa() {
+    	try {
+			 alchemyApi = AlchemyAPI.GetInstanceFromFile(CONFIG_FILE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+    }
+    
     public static void main(String[] args) {
 		new AlchemySa().test();
 	}    
@@ -38,12 +49,9 @@ public class AlchemySa implements SentiAnalyzerI {
 		double score = 0.0;
 		Sentiment sentiment = Sentiment.NEUTRAL;  
 		
-		try {
-			// Create an AlchemyAPI object.
-			AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromFile(CONFIG_FILE);
-			
+		try {	
 			// Extract sentiment for a text string.
-			Document doc = alchemyObj.TextGetTextSentiment(text);
+			Document doc = alchemyApi.TextGetTextSentiment(text);
 			NodeList list = doc.getElementsByTagName("docSentiment").item(0).getChildNodes();
 			
 			for (int i = 0; i < list.getLength(); i++) {
@@ -61,6 +69,10 @@ public class AlchemySa implements SentiAnalyzerI {
 		return new SaResult(sentiment, score);
 	}
 
+    public String getAnalyzerName() {
+    	return ANALYZER_NAME;
+    }
+    
 	// utility method
     private static String getStringFromDocument(Document doc) {
         try {
