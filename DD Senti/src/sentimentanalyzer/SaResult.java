@@ -18,4 +18,9 @@ public class SaResult {
 	public double getScore() {
 		return score;
 	}
+	
+	
+	public String toString() {
+		return sentiment.toString();
+	}
 }
