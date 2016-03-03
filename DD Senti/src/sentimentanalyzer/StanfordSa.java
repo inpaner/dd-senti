@@ -14,7 +14,7 @@ public class StanfordSa implements SentiAnalyzerI {
 	
 	
 	public static void main(String args[]){
-		new StanfordSa().test();
+
 	}
 
 	
@@ -40,7 +40,7 @@ public class StanfordSa implements SentiAnalyzerI {
 	    	sentimentStr = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
 	    }
 	    Sentiment sentiment = Sentiment.getSentiment(sentimentStr);
-	    return new SaResult(sentiment, 0.0);
+	    return new SaResult(sentiment, 0.0, text);
 	}
  
 	

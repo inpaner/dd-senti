@@ -64,7 +64,7 @@ public class AlchemySa implements SentiAnalyzerI {
 		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-		return new SaResult(sentiment, score);
+		return new SaResult(sentiment, score, text);
 	}
 
 	

@@ -105,7 +105,7 @@ public class MonkeyLearnSa implements SentiAnalyzerI {
 		
 		Double score = Double.valueOf( sentimentJson.get("probability").toString() );
 		Sentiment sentiment = Sentiment.getSentiment( sentimentJson.get("label").toString() );
-		return new SaResult(sentiment, score);
+		return new SaResult(sentiment, score, text);
 	}
 
 	
