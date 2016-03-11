@@ -1,4 +1,5 @@
 package sentimentanalyzer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,8 +47,12 @@ public class StanfordSa implements SentiAnalyzerI {
 	
 	@Override
 	public List<SaResult> getSentiments(List<String> texts) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SaResult> results = new ArrayList<>(); 
+		for (String text : texts) {
+			results.add( this.getSentiment(text) );
+		}
+		
+		return results;
 	}
 	
 	
