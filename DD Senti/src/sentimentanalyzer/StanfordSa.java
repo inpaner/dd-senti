@@ -45,6 +45,13 @@ public class StanfordSa implements SentiAnalyzerI {
  
 	
 	@Override
+	public List<SaResult> getSentiments(List<String> texts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	@Override
 	public String getAnalyzerName() {
 		return ANALYZER_NAME;
 	}

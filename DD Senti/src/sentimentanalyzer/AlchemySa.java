@@ -2,6 +2,7 @@ package sentimentanalyzer;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -67,6 +68,13 @@ public class AlchemySa implements SentiAnalyzerI {
 		return new SaResult(sentiment, score, text);
 	}
 
+	
+	@Override
+	public List<SaResult> getSentiments(List<String> texts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 	@Override
     public String getAnalyzerName() {
