@@ -1,17 +1,37 @@
 package sentimentanalyzer;
 
+import java.util.List;
+
 public class SentiAnalyzerApi {
 	
-//	public static SentiAnalyzerApi getMonkeyLearnSa() {
-//		return new SentiAnalyzerApi();
-//	}
+	public static SentiAnalyzerApi getMonkeyLearnSa() {
+		SentiAnalyzerApi api = new SentiAnalyzerApi();
+		api.sa = new MonkeyLearnSa();
+		return api;
+	}
+	
+	
+	public static SentiAnalyzerApi getAlchemySa() {
+		SentiAnalyzerApi api = new SentiAnalyzerApi();
+		api.sa = new AlchemySa();
+		return api;
+	}
+	
+	
+	public static SentiAnalyzerApi getStanfordSa() {
+		SentiAnalyzerApi api = new SentiAnalyzerApi();
+		api.sa = new StanfordSa();
+		return api;
+	}
+	
+
+	public static void main(String[] args) {
+		SentiAnalyzerApi.getAlchemySa().test();
+	}
 	
 	
 	private SentiAnalyzerI sa;
 	
-	public static void main(String[] args) {
-		new SentiAnalyzerApi().test();
-	}
 	
 	private void test() {
 		String[] texts = {"I like to eat pizza", 
@@ -28,13 +48,16 @@ public class SentiAnalyzerApi {
 	}
 	
 	
-	public SentiAnalyzerApi() {
-		this.sa = new AlchemySa(); // Default SA
-	}
+	private SentiAnalyzerApi() {}
 
 	
 	public SaResult getSentiment(String text) {
 		return sa.getSentiment(text);
+	}
+	
+	
+	public List<SaResult> getSentiments(List<String> texts) {
+		return sa.getSentiments(texts);
 	}
 	
 	
