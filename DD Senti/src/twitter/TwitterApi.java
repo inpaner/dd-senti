@@ -12,7 +12,8 @@ public class TwitterApi {
 //		api.testCrawler();
 //		api.analyzeTweets("cybersecurity");
 //		api.directAnalyzeTweets("cybersecurity");
-		api.runCrawler();
+		api.testKeywordDelete();
+//		api.runCrawler();
 	}
 	
 	
@@ -82,6 +83,11 @@ public class TwitterApi {
 		keywordmanager.getAll();
 	}
 	
+	
+	private void testKeywordDelete() {
+		KeywordManager km = new KeywordManager();
+		km.deleteKeyword("interior");
+	}
 	
 	private void testCrawler() {
 		String keyword = "hybrid cloud";
