@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class WordlistPanel extends JPanel {
 	private JTable table; 
 	private DefaultTableModel model;
 	private final List<String> wordCache = new ArrayList<>();
-	
+	private final int LIST_WIDTH = 200;
+	private final int LIST_HEIGHT = 300;
 	
 	public static void main(String[] args) {
 		MainFrame frame = new MainFrame();
@@ -38,11 +40,14 @@ public class WordlistPanel extends JPanel {
 		model = new DefaultTableModel(0, 1);
 		table = new JTable(model);
 		table.setTableHeader(null);
+		table.getColumnModel().getColumn(0).setWidth(LIST_WIDTH);
 		
 		TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
 		table.setRowSorter(trs);
 		trs.setSortsOnUpdates(true);
 		this.add(new JScrollPane(table));
+		
+		this.setPreferredSize(new Dimension(LIST_WIDTH, LIST_HEIGHT));
 	}
 	
 	
