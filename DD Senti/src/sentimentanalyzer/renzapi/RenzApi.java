@@ -23,11 +23,8 @@ public class RenzApi {
         
         try {
             Scanner positiveScanner = new Scanner(new File("renzmodel/Positive.txt"));
-            int i = 0;
             while (positiveScanner.hasNextLine()) {
                 Scanner positiveLine = new Scanner(positiveScanner.nextLine());
-                System.out.println(i);
-                i++;
                 String word = positiveLine.next();
                 Double score = Double.parseDouble(positiveLine.next());
                 positiveWords.put(word, score);
@@ -98,7 +95,7 @@ public class RenzApi {
         positive = getProductPositive();
         negative = getProductNegative();
 
-        System.out.println("Positive: " + positive + " Negative: " + negative);
+        //System.out.println("Positive: " + positive + " Negative: " + negative);
         
         
         if (positive > negative) {
