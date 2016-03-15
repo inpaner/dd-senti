@@ -21,6 +21,7 @@ public class Main {
 	public Main() {
 		sa = SentiAnalyzerApi.getStanfordSa();
 		ui = new UiApi();
+		ui.addListener(new UiListener());
 	}
 	
 	
@@ -30,12 +31,15 @@ public class Main {
 		public void addWord(String word) {
 			TwitterApi twitter = new TwitterApi();
 			twitter.addKeyword(word);
+			ui.clearAddWordField();
+			ui.addWord(word);
 		}
 
 		@Override
 		public void removeWord(String word) {
 			TwitterApi twitter = new TwitterApi();
 			twitter.removeKeyword(word);
+			ui.removeWord(word);
 		}
 
 		@Override

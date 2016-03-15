@@ -14,17 +14,17 @@ public class UiApi {
 	}
 	
 	
-	void addWord(String word) {
+	public void addWord(String word) {
 		panel.addWord(word);
 	}
 	
 	
-	void removeWord(String word) {
+	public void removeWord(String word) {
 		panel.removeWord(word);
 	}
 	
 	
-	void clearAddWordField() {
+	public void clearAddWordField() {
 		panel.clearAddWordField();
 	}
 }
