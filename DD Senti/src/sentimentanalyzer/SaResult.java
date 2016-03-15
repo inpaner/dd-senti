@@ -12,7 +12,7 @@ public class SaResult {
 	
 	SaResult(Sentiment sentiment, double score, String tweet) {
 		this.sentiment = sentiment;
-		this.score = score;
+		this.score = Math.abs(score);
 		this.tweet = tweet;
 	}
 	
