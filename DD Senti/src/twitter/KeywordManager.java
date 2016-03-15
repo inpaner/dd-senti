@@ -41,7 +41,12 @@ public class KeywordManager {
 			" FROM Keywords ";
     
     
-    public List<String> getAll() {
+    private static final String SQL_DELETE = 
+    		"DELETE FROM Keywords " +
+			" WHERE word = ? ";
+    
+    
+    List<String> getAll() {
         List<String> result = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -65,7 +70,7 @@ public class KeywordManager {
     }
     
 
-    public void addKeyword(String keyword) {
+    void addKeyword(String keyword) {
     	keyword = keyword.trim().toLowerCase();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -75,6 +80,25 @@ public class KeywordManager {
                 keyword
             };
             ps = DAOUtil.prepareStatement(conn, SQL_CREATE, false, values);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            DAOUtil.close(conn, ps);
+        }
+    }
+    
+    
+    void deleteKeyword(String keyword) {
+    	keyword = keyword.trim().toLowerCase();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = factory.getConnection();                               
+            Object[] values = {
+                keyword
+            };
+            ps = DAOUtil.prepareStatement(conn, SQL_DELETE, false, values);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
