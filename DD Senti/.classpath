@@ -18,5 +18,35 @@
 	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/xom-1.2.10-src.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/xom.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/ejml-0.23.jar" sourcepath="lib/core NLP/ejml-0.23-src.zip"/>
+	<classpathentry kind="lib" path="lib/core NLP/javax.json.jar" sourcepath="lib/core NLP/javax.json-api-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/joda-time.jar" sourcepath="lib/core NLP/joda-time-2.9-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/jollyday.jar" sourcepath="lib/core NLP/jollyday-0.4.7-sources.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/protobuf.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-models.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0.jar" sourcepath="lib/core NLP/stanford-corenlp-3.6.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DD%20Senti/lib/core%20NLP/stanford-corenlp-3.6.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/core NLP/xom.jar" sourcepath="lib/core NLP/xom-1.2.10-src.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/fluent-hc-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/httpclient-cache-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/httpclient-win-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/httpcore-4.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/httpmime-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/monkeylearn/org.apache/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/twitter4j-core-3.0.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DD%20Senti/lib/twitter4j-core-3.0.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
