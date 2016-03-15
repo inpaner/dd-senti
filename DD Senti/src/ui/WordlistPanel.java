@@ -72,11 +72,21 @@ public class WordlistPanel extends JPanel {
 	}
 	
 	
-	String getSelected() {
+	String getSelectedWord() {
 		String selected = "";
 		int row = table.getSelectedRow();
 		if (row != -1) {
 			selected = (String) table.getValueAt(row, 0);
+		}
+		return selected;
+	}
+	
+	
+	List<String> getSelectedWords() {
+		List<String> selected = new ArrayList<>();
+		int[] rows = table.getSelectedRows();
+		for (int row : rows) {
+			selected.add( (String) table.getValueAt(row, 0) );
 		}
 		return selected;
 	}
