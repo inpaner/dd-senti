@@ -12,7 +12,7 @@ import javax.swing.table.TableRowSorter;
 
 import net.miginfocom.swing.MigLayout;
 
-public class WordlistPanel extends JPanel {
+class WordlistPanel extends JPanel {
 	/**/ private static final long serialVersionUID = 306918208695614659L;
 	private JTable table; 
 	private DefaultTableModel model;

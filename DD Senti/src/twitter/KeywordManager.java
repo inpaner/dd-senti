@@ -46,7 +46,7 @@ public class KeywordManager {
 			" WHERE word = ? ";
     
     
-    public List<String> getAll() {
+    List<String> getAll() {
         List<String> result = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -70,7 +70,7 @@ public class KeywordManager {
     }
     
 
-    public void addKeyword(String keyword) {
+    void addKeyword(String keyword) {
     	keyword = keyword.trim().toLowerCase();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -89,7 +89,7 @@ public class KeywordManager {
     }
     
     
-    public void deleteKeyword(String keyword) {
+    void deleteKeyword(String keyword) {
     	keyword = keyword.trim().toLowerCase();
         Connection conn = null;
         PreparedStatement ps = null;

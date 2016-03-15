@@ -62,6 +62,30 @@ public class TwitterApi {
 	}
 	
 	
+	public List<Tweet> getTweetsByKeyword(String keyword) {
+		TweetManager manager = new TweetManager();
+		return manager.getAllByKeyword(keyword);
+	}
+	
+	
+	public List<String> getKeywords() {
+		KeywordManager manager = new KeywordManager();
+		return manager.getAll();
+	}
+	
+	
+	public void addKeyword(String keyword) {
+		KeywordManager manager = new KeywordManager();
+		manager.addKeyword(keyword);
+	}
+	
+	
+	public void removeKeyword(String keyword) {
+		KeywordManager manager = new KeywordManager();
+		manager.deleteKeyword(keyword);
+	}
+	
+	
 	public void runCrawler() {
 		Crawler crawler = new Crawler();
 		crawler.run();

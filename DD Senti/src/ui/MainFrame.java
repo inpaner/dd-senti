@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame {
+class MainFrame extends JFrame {
 	
 	public static final Dimension HeaderDimension = new Dimension(600, 30);
 	public static final Dimension FooterDimension = new Dimension(600, 30);
