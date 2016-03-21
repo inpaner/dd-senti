@@ -49,8 +49,19 @@ public class Main {
 			TwitterApi twitter = new TwitterApi();
 			for (String keyword : words) {
 				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);	
-				System.out.println(keyword);
 			}
+		}
+
+		@Override
+		public void crawlWordsOn() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void crawlWordOff() {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}

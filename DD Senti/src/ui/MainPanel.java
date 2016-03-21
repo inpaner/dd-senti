@@ -13,7 +13,10 @@ import net.miginfocom.swing.MigLayout;
 
 public class MainPanel extends JPanel {
 	/**/ private static final long serialVersionUID = 7512659837329002543L;
+	private final String CRAWL_BTN_ON = "Stop crawling";
+	private final String CRAWL_BTN_OFF = "Start crawling";
 	private final int ADD_WORD_FIELD_WIDTH = 15;
+	
 	private WordlistPanel allWordsPanel;
 	private WordlistPanel analyzeWordsPanel;
 	private JButton moveWordLeftBtn;
@@ -23,6 +26,8 @@ public class MainPanel extends JPanel {
 	private JButton analyzeBtn;
 	private List<Listener> listeners = new ArrayList<>();
 	private JTextField addWordField;
+	private JButton crawlBtn;
+	private boolean crawling = false;
 	
 	public static void main(String[] args) {
 		MainFrame frame = new MainFrame();
@@ -64,11 +69,15 @@ public class MainPanel extends JPanel {
 		
 		// Analyze words
 		analyzeWordsPanel = new WordlistPanel();
-		
 		this.add(analyzeWordsPanel);
 		
+		/* Bottom panel */
 		removeWordBtn = new JButton("Remove");
-		this.add(removeWordBtn);
+		crawlBtn = new JButton(CRAWL_BTN_OFF);
+		JPanel bottomButtonPanel = new JPanel();
+		bottomButtonPanel.add(removeWordBtn);
+		bottomButtonPanel.add(crawlBtn);
+		this.add(bottomButtonPanel);
 		analyzeBtn = new JButton("Analyze");
 		this.add(analyzeBtn, "skip");
 	}
@@ -119,6 +128,24 @@ public class MainPanel extends JPanel {
 			}
 		});
 		
+		crawlBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (crawling) {
+					crawlBtn.setText(CRAWL_BTN_OFF);
+					for (Listener listener : listeners) {
+						listener.crawlWordOff();
+					}
+				} else {
+					crawlBtn.setText(CRAWL_BTN_ON);
+					for (Listener listener : listeners) {
+						listener.crawlWordsOn();
+					}
+				}
+				crawling = !crawling;
+			}
+		});
+		
 		analyzeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -165,6 +192,8 @@ public class MainPanel extends JPanel {
 	public interface Listener {
 		public void addWord(String word);
 		public void removeWord(String word);
+		public void crawlWordsOn();
+		public void crawlWordOff();
 		public void analyzeWords(List<String> words);
 	}
 }
