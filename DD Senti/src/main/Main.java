@@ -22,6 +22,8 @@ public class Main {
 		sa = SentiAnalyzerApi.getStanfordSa();
 		ui = new UiApi();
 		ui.addListener(new UiListener());
+		TwitterApi twitter = new TwitterApi();
+		ui.addWordsToLeftPanel( twitter.getKeywords() );
 	}
 	
 	
@@ -45,10 +47,9 @@ public class Main {
 		@Override
 		public void analyzeWords(List<String> words) {
 			TwitterApi twitter = new TwitterApi();
-			
 			for (String keyword : words) {
-				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
-				
+				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);	
+				System.out.println(keyword);
 			}
 		}
 		

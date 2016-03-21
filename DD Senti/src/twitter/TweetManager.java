@@ -32,6 +32,9 @@ public class TweetManager {
     
     public List<Tweet> getAllByKeyword(String keyword) {
         List<Tweet> result = new ArrayList<>();
+        if (keyword.isEmpty()) {
+        	return result;
+        }
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
