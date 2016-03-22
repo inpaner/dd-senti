@@ -59,7 +59,7 @@ public class Crawler {
     		List<Status> tweets = this.mine(word);
     		tweetmanager.createAll(tweets, word);
 		}
-    	System.out.println("\n\n");
+    	System.out.println("Crawling cycle done. \n\n");
 	}
 	
     /**

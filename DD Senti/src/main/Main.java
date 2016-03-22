@@ -14,9 +14,14 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		new Main();
+		new Main().crawl();
 	}
 	
+	
+	private void crawl() {
+		TwitterApi twitter = new TwitterApi();
+		twitter.runCrawler();
+	}
 	
 	public Main() {
 		sa = SentiAnalyzerApi.getStanfordSa();
@@ -48,7 +53,8 @@ public class Main {
 		public void analyzeWords(List<String> words) {
 			TwitterApi twitter = new TwitterApi();
 			for (String keyword : words) {
-				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);	
+				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
+				
 			}
 		}
 
@@ -62,7 +68,6 @@ public class Main {
 		public void crawlWordOff() {
 			// TODO Auto-generated method stub
 			
-		}
-		
+		}	
 	}
 }
