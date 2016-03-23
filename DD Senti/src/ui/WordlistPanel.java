@@ -61,6 +61,13 @@ class WordlistPanel extends JPanel {
 	}
 	
 	
+	void addWords(List<String> words) {
+		for (String word : words) {
+			this.addWord(word);
+		}
+	}
+	
+	
 	void removeWord(String word) {
 		word = word.trim().toLowerCase();
 		if (!wordCache.contains(word)) {
@@ -69,6 +76,11 @@ class WordlistPanel extends JPanel {
 		wordCache.remove(word);
 		int index = this.getWordIndex(word);
 		model.removeRow(index);
+	}
+	
+	
+	List<String> getAllWords() {
+		return new ArrayList<>(wordCache);
 	}
 	
 	

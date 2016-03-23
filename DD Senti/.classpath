@@ -9,9 +9,6 @@
 	<classpathentry kind="lib" path="lib/core NLP/joda-time.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/jollyday-0.4.7-sources.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/jollyday.jar"/>
-	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/xom-1.2.10-src.jar"/>
 	<classpathentry kind="lib" path="lib/core NLP/xom.jar"/>
 	<classpathentry kind="lib" path="lib/monkeylearn/json-simple-1.1.1.jar"/>
@@ -40,5 +37,11 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/DD%20Senti/lib/miglayout-4.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-models.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/protobuf.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="lib/core NLP/stanford-corenlp-3.6.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

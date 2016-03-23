@@ -33,16 +33,30 @@ public class Crawler {
 	private final String CONSUMER_SECRET = "oQA5DunUy89Co5Hr7p4O2WmdzqiGTzssn2kMphKc8g";
 	private final String OAUTH_ACCESS_TOKEN = "461053984-aww1IbpSVcxUE2jN8VqsOkEw8IQeEMusx4IdPM9p";
 	private final String OAUTH_ACCESS_TOKEN_SECRET = "WGsbat8P8flqKqyAymnWnTnAGI5hZkgdaQSE8XALs7ZEp";
+	private ScheduledExecutorService executor;
 	
 	
 	public void run() {
+		if (executor != null && !executor.isShutdown()) {
+			return;
+		}
 		Runnable crawling = new Runnable() {
 		    public void run() {
 		    	Crawler.this.runOnce();
 		    }
 		};
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(crawling, 0, LOOP_RATE_IN_MINS, TimeUnit.MINUTES);			
+		executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(crawling, 0, LOOP_RATE_IN_MINS, TimeUnit.MINUTES);
+		System.out.println("Crawler running.");
+	}
+	
+	
+	public void stop() {
+		if (executor == null || executor.isShutdown()) {
+			return;
+		}
+		executor.shutdown();
+		System.out.println("Crawler stopped.");
 	}
 	
 	public void runOnce() {
@@ -59,7 +73,7 @@ public class Crawler {
     		List<Status> tweets = this.mine(word);
     		tweetmanager.createAll(tweets, word);
 		}
-    	System.out.println("\n\n");
+    	System.out.println("Crawling cycle done. \n\n");
 	}
 	
     /**

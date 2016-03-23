@@ -6,6 +6,8 @@ import java.util.List;
 import twitter4j.Status;
 
 public class TwitterApi {
+	private Crawler crawler = new Crawler();
+
 	public static void main(String[] args) {
 		TwitterApi api = new TwitterApi();
 //		api.testKeywordManager();
@@ -16,7 +18,7 @@ public class TwitterApi {
 //		api.runCrawler();
 	}
 	
-	
+
 	private void internalAnalyzeTweets(String keywordsCsv, boolean crawl) {
 		String[] keywords = keywordsCsv.split(",");
 		
@@ -26,7 +28,6 @@ public class TwitterApi {
 		}
 		
 		if (crawl) {
-			Crawler crawler = new Crawler();
 			crawler.runOnce();	
 		}
 		
@@ -87,10 +88,13 @@ public class TwitterApi {
 	
 	
 	public void runCrawler() {
-		Crawler crawler = new Crawler();
 		crawler.run();
 	}
 	
+	
+	public void stopCrawler() {
+		crawler.stop();
+	}
 	
 	/* Tests */
 	private void testKeywordManager() {
