@@ -1,6 +1,15 @@
 package twitter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Tweet {
+	
     private long id;
     private String username;
     private String text;
@@ -8,11 +17,17 @@ public class Tweet {
     private Double latitude;
     private Double longitude;
     private String keyword;
+    private static List<String> months;
     
+    static {
+    	String[] monthList = {"jan", "feb", "mar", "apr", "may", "jun",
+    			"jul", "aug", "sep", "oct", "nov", "dec"};
+    	months = Arrays.asList(monthList);
+    }
     
     public Tweet(long id, String username, String text, 
                 String date, Double latitude, Double longitude, String keyword) {
-        this.id = id;
+    	this.id = id;
         this.username = username;
         this.text = text;
         this.date = date;
@@ -70,6 +85,21 @@ public class Tweet {
     public String getKeyword() {
         return keyword;
     }
+    
+    void fixDate() {
+    	String[] twitterDates = date.split(" ");
+    	int month = months.indexOf(twitterDates[1].toLowerCase());
+    	int day = Integer.valueOf(twitterDates[2]);
+    	int year = Integer.valueOf(twitterDates[5]);
+    	String time = twitterDates[3];
+    	LocalTime fixedTime = LocalTime.parse(time);
+    	LocalDate fixedDate = LocalDate.of(year, month, day);
+    	LocalDateTime dateTime = LocalDateTime.of(fixedDate, fixedTime);
+    	date = dateTime.toString();
+    }
+    
+    public static void main(String[] args) {
+	}
     
     
     @Override

@@ -30,6 +30,61 @@ public class TweetManager {
             " WHERE keyword_fk = ? ";
     
     
+    private static final String SQL_GET_ALL =
+    		"SELECT id, username, text, date, latitude, longitude, keyword_fk " +
+            " FROM Tweets ";
+    
+    
+    private static final String UPDATE_DATE = 
+    		"UPDATE Tweets "
+    		+ "SET date = ? "
+    		+ "WHERE id = ? ";
+    
+    public static void main(String[] args) {
+		// new TweetManager().fixDates();
+	}
+    
+    private void fixDates() {
+    	List<Tweet> tweets = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+        	Object[] values = {};
+            conn = factory.getConnection();
+            ps = DAOUtil.prepareStatement(conn, SQL_GET_ALL, false, values);        
+            System.out.println("here");
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Tweet tweet = map(rs);
+                tweets.add(tweet);
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            DAOUtil.close(conn, ps, rs);
+        }
+        
+        try {
+        	conn = factory.getConnection();
+        	for (Tweet tweet : tweets) {
+        		System.out.println("here2");
+            	tweet.fixDate();
+            	Object[] values = {tweet.getDate(), tweet.getId()};
+            	ps = DAOUtil.prepareStatement(conn, UPDATE_DATE, false, values);        
+            	ps.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            DAOUtil.close(conn, ps, rs);
+        }
+        
+    }
+    
     public List<Tweet> getAllByKeyword(String keyword) {
         List<Tweet> result = new ArrayList<>();
         if (keyword.isEmpty()) {
