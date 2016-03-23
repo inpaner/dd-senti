@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import db.DAOFactory;
@@ -13,7 +17,15 @@ import twitter4j.Status;
 
 public class TweetManager {
     private DAOFactory factory;
+    private static List<String> months;
     
+    
+    static {
+    	String[] monthList = {"jan", "feb", "mar", "apr", "may", "jun",
+    			"jul", "aug", "sep", "oct", "nov", "dec"};
+    	months = Arrays.asList(monthList);
+    }
+
     
     public TweetManager() {
         factory = DAOFactory.getInstance();
@@ -40,6 +52,7 @@ public class TweetManager {
     		+ "SET date = ? "
     		+ "WHERE id = ? ";
     
+    
     public static void main(String[] args) {
 		// new TweetManager().fixDates();
 	}
@@ -54,9 +67,8 @@ public class TweetManager {
         	Object[] values = {};
             conn = factory.getConnection();
             ps = DAOUtil.prepareStatement(conn, SQL_GET_ALL, false, values);        
-            System.out.println("here");
             rs = ps.executeQuery();
-            
+            // tweet.fixDate();
             while (rs.next()) {
                 Tweet tweet = map(rs);
                 tweets.add(tweet);
@@ -70,8 +82,7 @@ public class TweetManager {
         try {
         	conn = factory.getConnection();
         	for (Tweet tweet : tweets) {
-        		System.out.println("here2");
-            	tweet.fixDate();
+        		// tweet.fixDate();
             	Object[] values = {tweet.getDate(), tweet.getId()};
             	ps = DAOUtil.prepareStatement(conn, UPDATE_DATE, false, values);        
             	ps.executeUpdate();
@@ -81,9 +92,9 @@ public class TweetManager {
             System.err.println(e.getMessage());
         } finally {
             DAOUtil.close(conn, ps, rs);
-        }
-        
+        }    
     }
+    
     
     public List<Tweet> getAllByKeyword(String keyword) {
         List<Tweet> result = new ArrayList<>();
@@ -112,6 +123,19 @@ public class TweetManager {
     }
     
     
+    private String fixDate(String date) {
+    	String[] twitterDates = date.split(" ");
+    	int month = months.indexOf(twitterDates[1].toLowerCase());
+    	int day = Integer.valueOf(twitterDates[2]);
+    	int year = Integer.valueOf(twitterDates[5]);
+    	String time = twitterDates[3];
+    	LocalTime fixedTime = LocalTime.parse(time);
+    	LocalDate fixedDate = LocalDate.of(year, month, day);
+    	LocalDateTime dateTime = LocalDateTime.of(fixedDate, fixedTime);
+    	return dateTime.toString();
+    }
+    
+    
     public void createAll(List<Status> tweets, String keyword) {        
         Connection conn = null;
         PreparedStatement ps = null;
@@ -132,12 +156,12 @@ public class TweetManager {
             		text.replaceAll("\n", " ");
             	} catch (NullPointerException ex) {
             	}
-                
+                String date = this.fixDate(tweet.getCreatedAt().toString()); 
                 Object[] values = {
                         tweet.getId(),
                         tweet.getUser().getScreenName(),
                         text,
-                        tweet.getCreatedAt().toString(),
+                        date,
                         latitude,
                         longitude,
                         keyword
