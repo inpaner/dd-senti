@@ -125,7 +125,7 @@ public class TweetManager {
     
     private String fixDate(String date) {
     	String[] twitterDates = date.split(" ");
-    	int month = months.indexOf(twitterDates[1].toLowerCase());
+    	int month = months.indexOf(twitterDates[1].toLowerCase()) + 1;
     	int day = Integer.valueOf(twitterDates[2]);
     	int year = Integer.valueOf(twitterDates[5]);
     	String time = twitterDates[3];
