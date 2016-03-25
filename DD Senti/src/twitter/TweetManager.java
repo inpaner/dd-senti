@@ -56,18 +56,19 @@ public class TweetManager {
     
     
     private static final String SQL_TWEET_COUNT =
-    		"SELECT COUNT(*) AS dates "
+    		"SELECT COUNT(*) AS count "
     		+ "FROM Tweets "
     		+ "WHERE date like ? ";
     
     
     public static void main(String[] args) {
 		// new TweetManager().fixDates();
-    	new TweetManager().testDates();
+    	new TweetManager().getTweetCounts();
 	}
     
     
-    private void testDates() {
+    List<TweetCount> getTweetCounts() {
+    	List<TweetCount> tweetCounts = new ArrayList<>();
     	Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -82,8 +83,8 @@ public class TweetManager {
                 ps = DAOUtil.prepareStatement(conn, SQL_TWEET_COUNT, false, values);        
                 rs = ps.executeQuery();
                 while (rs.next()) {
-                	int count = rs.getInt("dates");
-                    System.out.println(date.toString() + ": " + count);
+                	TweetCount count = new TweetCount(date, rs.getInt("count"));
+                	tweetCounts.add(count);
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -92,6 +93,7 @@ public class TweetManager {
             }
         	date = date.minusDays(1);
         }
+        return tweetCounts;
     }
     
     
