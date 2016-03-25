@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.net.ssl.HandshakeCompletedListener;
-
 import db.DAOFactory;
 import db.DAOUtil;
 import twitter4j.Status;
