@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.HandshakeCompletedListener;
+
 import db.DAOFactory;
 import db.DAOUtil;
 import twitter4j.Status;
@@ -18,7 +20,7 @@ import twitter4j.Status;
 public class TweetManager {
     private DAOFactory factory;
     private static List<String> months;
-    
+    private final int TWEET_COUNT_DAYS = 7;
     
     static {
     	String[] monthList = {"jan", "feb", "mar", "apr", "may", "jun",
@@ -47,15 +49,51 @@ public class TweetManager {
             " FROM Tweets ";
     
     
-    private static final String UPDATE_DATE = 
+    private static final String SQL_UPDATE_DATE = 
     		"UPDATE Tweets "
     		+ "SET date = ? "
     		+ "WHERE id = ? ";
     
     
+    private static final String SQL_TWEET_COUNT =
+    		"SELECT COUNT(*) AS dates "
+    		+ "FROM Tweets "
+    		+ "WHERE date like ? ";
+    
+    
     public static void main(String[] args) {
 		// new TweetManager().fixDates();
+    	new TweetManager().testDates();
 	}
+    
+    
+    private void testDates() {
+    	Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        // LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2016, 1, 23);
+        for (int i = 0; i < TWEET_COUNT_DAYS; i++) {
+        	try {
+        		String dateStr = date.toString() + "%";
+            	Object[] values = {dateStr};
+                conn = factory.getConnection();
+                ps = DAOUtil.prepareStatement(conn, SQL_TWEET_COUNT, false, values);        
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                	int count = rs.getInt("dates");
+                    System.out.println(date.toString() + ": " + count);
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            } finally {
+                DAOUtil.close(conn, ps, rs);
+            }
+        	date = date.minusDays(1);
+        }
+    }
+    
     
     private void fixDates() {
     	List<Tweet> tweets = new ArrayList<>();
@@ -84,7 +122,7 @@ public class TweetManager {
         	for (Tweet tweet : tweets) {
         		// tweet.fixDate();
             	Object[] values = {tweet.getDate(), tweet.getId()};
-            	ps = DAOUtil.prepareStatement(conn, UPDATE_DATE, false, values);        
+            	ps = DAOUtil.prepareStatement(conn, SQL_UPDATE_DATE, false, values);        
             	ps.executeUpdate();
             }
 
