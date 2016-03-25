@@ -3,12 +3,14 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import sentimentanalyzer.SaResult;
 import sentimentanalyzer.SentiAnalyzerApi;
 import sentimentanalyzer.Sentiment;
 import twitter.Tweet;
+import twitter.TweetCount;
 import twitter.TwitterApi;
 import ui.MainPanel;
 import ui.UiApi;
@@ -30,6 +32,7 @@ public class Main {
 		twitter.runCrawler();
 	}
 	
+	
 	public Main() {
 		sa = SentiAnalyzerApi.getStanfordSa();
 		ui = new UiApi();
@@ -40,9 +43,10 @@ public class Main {
 	
 	
 	private void analyzeWords(List<String> words) {
-		/* Sentiment */
+		/* Sentiments */
 		System.out.println("Analyzing words");
 		JsonBuilder jsonBuilder = new JsonBuilder();
+		List<JsonObject> sentimentJsons = new ArrayList<>();
 		for (String keyword : words) {
 			System.out.println("Analyzing " + keyword);
 			List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
@@ -67,11 +71,18 @@ public class Main {
 			
 			JsonObject sentimentJson = 
 					jsonBuilder.buildSentiment(keyword, positive, negative, neutral);
+			sentimentJsons.add(sentimentJson);
 		}
-		System.out.println("Done.");
+		JsonArray sentimentsArray = jsonBuilder.buildSentiments(sentimentJsons); 
+		System.out.println("Done analyzing.");
 		
 		/* Tweet count */
+		List<TweetCount> tweetCounts = twitter.getTweetCounts();
+		JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
 		
+		JsonObject result = jsonBuilder.buildAll(sentimentsArray, tweetCountArray);
+		// save result to somewhere
+		System.out.println(result.toString());
 	}
 	
 	
