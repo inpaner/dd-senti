@@ -12,6 +12,8 @@ import twitter.TweetCount;
 import twitter.TweetManager;
 
 class JsonBuilder {
+	private final String DATA_KEY = "data";
+	
 	private final String SENTIMENT_KEY = "sentiment";
 	private final String KEYWORD_KEY = "keyword";
 	private final String POSITIVE_KEY = "positive";
@@ -36,20 +38,10 @@ class JsonBuilder {
 		}
 		return countsArray.build();
 	}
+
 	
-	
-	JsonArray buildSentiments(List<JsonObject> sentimentObjects) {
-		JsonArrayBuilder keywordArray = Json.createArrayBuilder();
-		for (JsonObject keywordObject : sentimentObjects) {
-			keywordArray.add(keywordObject);
-		}	
-		return keywordArray.build();
-	}
-	
-	
-	JsonObject buildSentiment(String keyword, int positive, int negative, int neutral) {
+	JsonObject buildSentiment(int positive, int negative, int neutral) {
 		JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add(KEYWORD_KEY, keyword);
 		builder.add(POSITIVE_KEY, positive);
 		builder.add(NEGATIVE_KEY, negative);
 		builder.add(NEUTRAL_KEY, neutral);
@@ -57,10 +49,22 @@ class JsonBuilder {
 	}
 	
 	
-	JsonObject buildAll(JsonArray sentiment, JsonArray tweetCount) {
+	JsonObject buildKeywordSet(String keyword, JsonObject sentiment, JsonArray tweetCount) {
 		JsonObjectBuilder result = Json.createObjectBuilder();
+		result.add(KEYWORD_KEY, keyword);
 		result.add(SENTIMENT_KEY, sentiment);
 		result.add(TWEET_COUNT_KEY, tweetCount);
+		return result.build();
+	}
+	
+	
+	JsonObject buildAll(List<JsonObject> keywordSets) {
+		JsonArrayBuilder keywordSetsArray = Json.createArrayBuilder();
+		for (JsonObject keywordSet : keywordSets) {
+			keywordSetsArray.add(keywordSet);
+		}
+		JsonObjectBuilder result = Json.createObjectBuilder();
+		result.add(DATA_KEY, keywordSetsArray);
 		return result.build();
 	}
 }

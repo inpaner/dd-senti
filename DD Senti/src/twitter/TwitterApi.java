@@ -101,9 +101,9 @@ public class TwitterApi {
 	}
 	
 	
-	public List<TweetCount> getTweetCounts() {
+	public List<TweetCount> getTweetCounts(String keyword) {
 		TweetManager manager = new TweetManager();
-		return manager.getTweetCounts();
+		return manager.getTweetCounts(keyword);
 	}
 	
 	

@@ -56,27 +56,27 @@ public class TweetManager {
     private static final String SQL_TWEET_COUNT =
     		"SELECT COUNT(*) AS count "
     		+ "FROM Tweets "
-    		+ "WHERE date like ? ";
+    		+ "WHERE keyword_fk = ? AND date like ?";
     
     
     public static void main(String[] args) {
 		// new TweetManager().fixDates();
-    	new TweetManager().getTweetCounts();
+    	new TweetManager().getTweetCounts("digital marketing");
 	}
     
     
-    List<TweetCount> getTweetCounts() {
+    List<TweetCount> getTweetCounts(String keyword) {
     	List<TweetCount> tweetCounts = new ArrayList<>();
     	Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        // LocalDate date = LocalDate.now();
-        LocalDate date = LocalDate.of(2016, 1, 23);
+        LocalDate date = LocalDate.now();
+//        LocalDate date = LocalDate.of(2016, 1, 23);
         for (int i = 0; i < TWEET_COUNT_DAYS; i++) {
         	try {
         		String dateStr = date.toString() + "%";
-            	Object[] values = {dateStr};
+            	Object[] values = {keyword, dateStr};
                 conn = factory.getConnection();
                 ps = DAOUtil.prepareStatement(conn, SQL_TWEET_COUNT, false, values);        
                 rs = ps.executeQuery();

@@ -44,9 +44,9 @@ public class Main {
 	
 	private void analyzeWords(List<String> words) {
 		/* Sentiments */
-		System.out.println("Analyzing words");
+		System.out.println("Analyzing keywords");
 		JsonBuilder jsonBuilder = new JsonBuilder();
-		List<JsonObject> sentimentJsons = new ArrayList<>();
+		List<JsonObject> keywordSets = new ArrayList<>();
 		for (String keyword : words) {
 			System.out.println("Analyzing " + keyword);
 			List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
@@ -70,18 +70,17 @@ public class Main {
 			}
 			
 			JsonObject sentimentJson = 
-					jsonBuilder.buildSentiment(keyword, positive, negative, neutral);
-			sentimentJsons.add(sentimentJson);
+					jsonBuilder.buildSentiment(positive, negative, neutral);
+			System.out.println("Done analyzing.");
+			
+			/* Tweet count */
+			List<TweetCount> tweetCounts = twitter.getTweetCounts(keyword);
+			JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
+			
+			JsonObject keywordSet = jsonBuilder.buildKeywordSet(keyword, sentimentJson, tweetCountArray);
+			keywordSets.add(keywordSet);
 		}
-		JsonArray sentimentsArray = jsonBuilder.buildSentiments(sentimentJsons); 
-		System.out.println("Done analyzing.");
-		
-		/* Tweet count */
-		List<TweetCount> tweetCounts = twitter.getTweetCounts();
-		JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
-		
-		JsonObject result = jsonBuilder.buildAll(sentimentsArray, tweetCountArray);
-		// save result to somewhere
+		JsonObject result = jsonBuilder.buildAll(keywordSets);
 		System.out.println(result.toString());
 	}
 	
