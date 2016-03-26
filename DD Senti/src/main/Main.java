@@ -3,10 +3,14 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+
 import sentimentanalyzer.SaResult;
 import sentimentanalyzer.SentiAnalyzerApi;
 import sentimentanalyzer.Sentiment;
 import twitter.Tweet;
+import twitter.TweetCount;
 import twitter.TwitterApi;
 import ui.MainPanel;
 import ui.UiApi;
@@ -28,12 +32,56 @@ public class Main {
 		twitter.runCrawler();
 	}
 	
+	
 	public Main() {
 		sa = SentiAnalyzerApi.getStanfordSa();
 		ui = new UiApi();
 		ui.addListener(new UiListener());
 		twitter = new TwitterApi();
 		ui.addWordsToLeftPanel( twitter.getKeywords() );
+	}
+	
+	
+	private void analyzeWords(List<String> words) {
+		/* Sentiments */
+		System.out.println("Analyzing keywords");
+		JsonBuilder jsonBuilder = new JsonBuilder();
+		List<JsonObject> keywordSets = new ArrayList<>();
+		for (String keyword : words) {
+			System.out.println("Analyzing " + keyword);
+			List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
+			List<String> tweetTexts = new ArrayList<>();
+			for (Tweet tweet : tweets) {
+				tweetTexts.add(tweet.getText());
+			}
+			System.out.println("Getting sentiment of " + tweetTexts.size() + " tweets.");
+			List<SaResult> sentiments = sa.getSentiments(tweetTexts);
+			int positive = 0;
+			int negative = 0;
+			int neutral = 0;
+			for (SaResult sentiment : sentiments) {
+				if (sentiment.getSentiment().equals(Sentiment.POSITIVE)) {
+					positive++;
+				} else if (sentiment.getSentiment().equals(Sentiment.NEGATIVE)) {
+					negative++;
+				} else if (sentiment.getSentiment().equals(Sentiment.NEUTRAL)) {
+					neutral++;
+				}
+			}
+			
+			JsonObject sentimentJson = 
+					jsonBuilder.buildSentiment(positive, negative, neutral);
+			System.out.println("Done analyzing.");
+			
+			/* Tweet count */
+			List<TweetCount> tweetCounts = twitter.getTweetCounts(keyword);
+			JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
+			
+			JsonObject keywordSet = jsonBuilder.buildKeywordSet(keyword, sentimentJson, tweetCountArray);
+			keywordSets.add(keywordSet);
+		}
+		JsonObject result = jsonBuilder.buildAll(keywordSets);
+		System.out.println(result.toString());
 	}
 	
 	
@@ -54,37 +102,10 @@ public class Main {
 			ui.removeWord(word);
 		}
 
+		
 		@Override
 		public void analyzeWords(List<String> words) {
-			System.out.println("Analyzing words");
-			for (String keyword : words) {
-				System.out.println("Analyzing " + keyword);
-				List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
-				List<String> tweetTexts = new ArrayList<>();
-				for (Tweet tweet : tweets) {
-					tweetTexts.add(tweet.getText());
-				}
-				System.out.println("Getting sentiment of " + tweetTexts.size() + " tweets.");
-				List<SaResult> sentiments = sa.getSentiments(tweetTexts);
-				int positive = 0;
-				int negative = 0;
-				int neutral = 0;
-				for (SaResult sentiment : sentiments) {
-					if (sentiment.getSentiment().equals(Sentiment.POSITIVE)) {
-						positive++;
-					} else if (sentiment.getSentiment().equals(Sentiment.NEGATIVE)) {
-						negative++;
-					} else if (sentiment.getSentiment().equals(Sentiment.NEUTRAL)) {
-						neutral++;
-					}
-				}
-				System.out.println("Keyword: " + keyword);
-				System.out.println("Positive: " + positive);
-				System.out.println("Negative: " + negative);
-				System.out.println("Neutral: " + neutral);
-				System.out.println();
-			}
-			System.out.println("Done.");
+			Main.this.analyzeWords(words);
 		}
 
 		@Override

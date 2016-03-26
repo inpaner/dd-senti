@@ -1,6 +1,15 @@
 package twitter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Tweet {
+	
     private long id;
     private String username;
     private String text;
@@ -9,10 +18,9 @@ public class Tweet {
     private Double longitude;
     private String keyword;
     
-    
     public Tweet(long id, String username, String text, 
                 String date, Double latitude, Double longitude, String keyword) {
-        this.id = id;
+    	this.id = id;
         this.username = username;
         this.text = text;
         this.date = date;
@@ -70,6 +78,10 @@ public class Tweet {
     public String getKeyword() {
         return keyword;
     }
+    
+    
+    public static void main(String[] args) {
+	}
     
     
     @Override

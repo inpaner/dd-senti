@@ -3,6 +3,10 @@ package twitter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 import twitter4j.Status;
 
 public class TwitterApi {
@@ -95,6 +99,13 @@ public class TwitterApi {
 	public void stopCrawler() {
 		crawler.stop();
 	}
+	
+	
+	public List<TweetCount> getTweetCounts(String keyword) {
+		TweetManager manager = new TweetManager();
+		return manager.getTweetCounts(keyword);
+	}
+	
 	
 	/* Tests */
 	private void testKeywordManager() {

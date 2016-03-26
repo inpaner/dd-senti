@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import db.DAOFactory;
@@ -13,7 +17,15 @@ import twitter4j.Status;
 
 public class TweetManager {
     private DAOFactory factory;
+    private static List<String> months;
+    private final int TWEET_COUNT_DAYS = 7;
     
+    static {
+    	String[] monthList = {"jan", "feb", "mar", "apr", "may", "jun",
+    			"jul", "aug", "sep", "oct", "nov", "dec"};
+    	months = Arrays.asList(monthList);
+    }
+
     
     public TweetManager() {
         factory = DAOFactory.getInstance();
@@ -28,6 +40,98 @@ public class TweetManager {
             "SELECT id, username, text, date, latitude, longitude, keyword_fk " +
             " FROM Tweets " +
             " WHERE keyword_fk = ? ";
+    
+    
+    private static final String SQL_GET_ALL =
+    		"SELECT id, username, text, date, latitude, longitude, keyword_fk " +
+            " FROM Tweets ";
+    
+    
+    private static final String SQL_UPDATE_DATE = 
+    		"UPDATE Tweets "
+    		+ "SET date = ? "
+    		+ "WHERE id = ? ";
+    
+    
+    private static final String SQL_TWEET_COUNT =
+    		"SELECT COUNT(*) AS count "
+    		+ "FROM Tweets "
+    		+ "WHERE keyword_fk = ? AND date like ?";
+    
+    
+    public static void main(String[] args) {
+		// new TweetManager().fixDates();
+    	new TweetManager().getTweetCounts("digital marketing");
+	}
+    
+    
+    List<TweetCount> getTweetCounts(String keyword) {
+    	List<TweetCount> tweetCounts = new ArrayList<>();
+    	Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        LocalDate date = LocalDate.now();
+//        LocalDate date = LocalDate.of(2016, 1, 23);
+        for (int i = 0; i < TWEET_COUNT_DAYS; i++) {
+        	try {
+        		String dateStr = date.toString() + "%";
+            	Object[] values = {keyword, dateStr};
+                conn = factory.getConnection();
+                ps = DAOUtil.prepareStatement(conn, SQL_TWEET_COUNT, false, values);        
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                	TweetCount count = new TweetCount(date, rs.getInt("count"));
+                	tweetCounts.add(count);
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            } finally {
+                DAOUtil.close(conn, ps, rs);
+            }
+        	date = date.minusDays(1);
+        }
+        return tweetCounts;
+    }
+    
+    
+    private void fixDates() {
+    	List<Tweet> tweets = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+        	Object[] values = {};
+            conn = factory.getConnection();
+            ps = DAOUtil.prepareStatement(conn, SQL_GET_ALL, false, values);        
+            rs = ps.executeQuery();
+            // tweet.fixDate();
+            while (rs.next()) {
+                Tweet tweet = map(rs);
+                tweets.add(tweet);
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            DAOUtil.close(conn, ps, rs);
+        }
+        
+        try {
+        	conn = factory.getConnection();
+        	for (Tweet tweet : tweets) {
+        		// tweet.fixDate();
+            	Object[] values = {tweet.getDate(), tweet.getId()};
+            	ps = DAOUtil.prepareStatement(conn, SQL_UPDATE_DATE, false, values);        
+            	ps.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            DAOUtil.close(conn, ps, rs);
+        }    
+    }
     
     
     public List<Tweet> getAllByKeyword(String keyword) {
@@ -57,6 +161,19 @@ public class TweetManager {
     }
     
     
+    private String fixDate(String date) {
+    	String[] twitterDates = date.split(" ");
+    	int month = months.indexOf(twitterDates[1].toLowerCase()) + 1;
+    	int day = Integer.valueOf(twitterDates[2]);
+    	int year = Integer.valueOf(twitterDates[5]);
+    	String time = twitterDates[3];
+    	LocalTime fixedTime = LocalTime.parse(time);
+    	LocalDate fixedDate = LocalDate.of(year, month, day);
+    	LocalDateTime dateTime = LocalDateTime.of(fixedDate, fixedTime);
+    	return dateTime.toString();
+    }
+    
+    
     public void createAll(List<Status> tweets, String keyword) {        
         Connection conn = null;
         PreparedStatement ps = null;
@@ -77,12 +194,12 @@ public class TweetManager {
             		text.replaceAll("\n", " ");
             	} catch (NullPointerException ex) {
             	}
-                
+                String date = this.fixDate(tweet.getCreatedAt().toString()); 
                 Object[] values = {
                         tweet.getId(),
                         tweet.getUser().getScreenName(),
                         text,
-                        tweet.getCreatedAt().toString(),
+                        date,
                         latitude,
                         longitude,
                         keyword
