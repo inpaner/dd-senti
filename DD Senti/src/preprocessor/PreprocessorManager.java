@@ -59,6 +59,6 @@ public class PreprocessorManager {
 	
 	// Removes letters that repeats in a word (e.g. llloooovvveee = love)
 	private String removeRepeatingLetters(String line) {
-		return line.replaceAll("(.)\\1{1,}", "$1");
+		return line.replaceAll("(.)\\1\\1+", "$1");
 	}
 }
