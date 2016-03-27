@@ -32,6 +32,11 @@ class JsonBuilder {
 	private final String TEXT_KEY = "text";
 	private final String WEIGHT_KEY = "weight";
 	
+	private final String COLOR_KEY = "color";
+	private final String POSITIVE_COLOR = "blue";
+	private final String NEGATIVE_COLOR = "red";
+	private final String NEUTRAL_COLOR = "black";
+	
 	public static void main(String[] args) {
 	}
 	
@@ -66,17 +71,27 @@ class JsonBuilder {
 	}
 	
 	
-	JsonArray buildWordcloud(Map<String, Integer> wordcloud) {
+	JsonArray buildWordcloud(Map<String, Integer> positive, Map<String, Integer> negative,
+			Map<String, Integer> neutral) {
 		JsonArrayBuilder result = Json.createArrayBuilder();
-		
+		result = this.buildIndividualWordCloud(result, positive, POSITIVE_COLOR);
+		result = this.buildIndividualWordCloud(result, negative, NEGATIVE_COLOR);
+		result = this.buildIndividualWordCloud(result, neutral, NEUTRAL_COLOR);	
+		return result.build();
+	}
+	
+	
+	private JsonArrayBuilder buildIndividualWordCloud(JsonArrayBuilder builder, 
+			Map<String, Integer> wordcloud, String color) {
 		for (String word : wordcloud.keySet()) {
 			JsonObjectBuilder json = Json.createObjectBuilder();
 			int weight = wordcloud.get(word);
 			json.add(TEXT_KEY, word);
 			json.add(WEIGHT_KEY, weight);
-			result.add(json);
+			json.add(COLOR_KEY, color);
+			builder.add(json);
 		}
-		return result.build();
+		return builder;
 	}
 	
 	

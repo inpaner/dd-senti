@@ -58,21 +58,21 @@ public class Main {
 			}
 			System.out.println("Getting sentiment of " + tweetTexts.size() + " tweets.");
 			List<SaResult> sentiments = sa.getSentiments(tweetTexts);
-			int positive = 0;
-			int negative = 0;
-			int neutral = 0;
+			List<String> positiveTexts = new ArrayList<>();
+			List<String> negativeTexts = new ArrayList<>();
+			List<String> neutralTexts = new ArrayList<>();
 			for (SaResult sentiment : sentiments) {
 				if (sentiment.getSentiment().equals(Sentiment.POSITIVE)) {
-					positive++;
+					positiveTexts.add(sentiment.getTweet());
 				} else if (sentiment.getSentiment().equals(Sentiment.NEGATIVE)) {
-					negative++;
+					negativeTexts.add(sentiment.getTweet());
 				} else if (sentiment.getSentiment().equals(Sentiment.NEUTRAL)) {
-					neutral++;
+					neutralTexts.add(sentiment.getTweet());
 				}
 			}
 			
-			JsonObject sentimentJson = 
-					jsonBuilder.buildSentiment(positive, negative, neutral);
+			JsonObject sentimentJson = jsonBuilder.buildSentiment(positiveTexts.size(), 
+					negativeTexts.size(), neutralTexts.size());
 			System.out.println("Done analyzing.");
 			
 			/* Tweet count */
@@ -80,11 +80,19 @@ public class Main {
 			JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
 			
 			/* Word cloud */
-			NGramAnalyzer ngram = new NGramAnalyzer(tweetTexts);
-			Map<String, Integer> wordcloudMap = ngram.getNgram();
-			JsonArray wordcloudArray = jsonBuilder.buildWordcloud(wordcloudMap);
+			NGramAnalyzer ngram = new NGramAnalyzer(positiveTexts);
+			Map<String, Integer> positiveNgram = ngram.getNgram();
 			
-			JsonObject keywordSet = jsonBuilder.buildKeywordSet(keyword, sentimentJson, tweetCountArray, wordcloudArray);
+			ngram = new NGramAnalyzer(negativeTexts);
+			Map<String, Integer> negativeNgram = ngram.getNgram();
+			
+			ngram = new NGramAnalyzer(neutralTexts);
+			Map<String, Integer> neutralNgram = ngram.getNgram();
+			JsonArray wordcloudArray = 
+					jsonBuilder.buildWordcloud(positiveNgram, negativeNgram, neutralNgram);
+			
+			JsonObject keywordSet = jsonBuilder.buildKeywordSet(
+					keyword, sentimentJson, tweetCountArray, wordcloudArray);
 			keywordSets.add(keywordSet);
 		}
 		JsonObject result = jsonBuilder.buildAll(keywordSets);
