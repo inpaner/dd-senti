@@ -3,26 +3,32 @@ package sentimentanalyzer;
 import java.util.*;
 
 public class NGramAnalyzer {
-	String[] tweets;
+	private List<String> tweets;
+	private final int N = 2;
+	private final int NGRAMS_TO_GET = 10;
+
 	
-	public NGramAnalyzer(String[] t) {
-		tweets = t;
+	public NGramAnalyzer(List<String> tweets) {
+		this.tweets = tweets;
 	}
+	
 	
 	public static void main(String[] args){
 		FileIO io = new FileIO();
 		String[] tweets = io.readTweet("src/sentimentanalyzer/SampleTweet");
 		
-		NGramAnalyzer analyzer = new NGramAnalyzer(tweets);
-		Map<String, Integer> output = analyzer.NGram(4);
-		analyzer.printMap(output);
+// 		NGramAnalyzer analyzer = new NGramAnalyzer(tweets);
+//		Map<String, Integer> output = analyzer.NGram(4);
+//		analyzer.printMap(output);
 	}
 	
-	public Map<String, Integer> NGram(int n) {
+	
+	public Map<String, Integer> getNgram() {
+		int n = this.N;
 		HashMap<String, Integer> ngramMap = new HashMap<String, Integer>();
 		
-		for (String s : tweets) {
-			String[] split = s.split(" +");
+		for (String tweet : tweets) {
+			String[] split = tweet.split(" +");
 			
 			if (split.length < n)
 				continue;
@@ -42,9 +48,18 @@ public class NGramAnalyzer {
 		}
 		
 		Map<String, Integer> sorted = MapUtil.sortByValue(ngramMap);
-		
-		return sorted;
+		Map<String, Integer> truncated = new HashMap<>();
+		int addedNgrams = 0;
+		for (String word : sorted.keySet()) {
+			truncated.put(word, sorted.get(word));
+			addedNgrams++;
+			if (addedNgrams > NGRAMS_TO_GET) {
+				break;
+			}
+		}
+		return truncated;
 	}
+	
 	
 	public void printMap(Map<String, Integer> map) {
 		for (Map.Entry entry : map.entrySet())
@@ -52,6 +67,7 @@ public class NGramAnalyzer {
 	}
 
 }
+
 
 class MapUtil
 {
