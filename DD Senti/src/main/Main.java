@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
+import preprocessor.PreprocessorManager;
 import sentimentanalyzer.NGramAnalyzer;
 import sentimentanalyzer.SaResult;
 import sentimentanalyzer.SentiAnalyzerApi;
@@ -21,7 +22,7 @@ public class Main {
 	private SentiAnalyzerApi sa;
 	private UiApi ui;
 	private TwitterApi twitter;
-	
+	private PreprocessorManager preprocessor;
 
 	public static void main(String[] args) {
 //		new Main().crawl();
@@ -37,10 +38,12 @@ public class Main {
 	
 	public Main() {
 		sa = SentiAnalyzerApi.getStanfordSa();
+		preprocessor = new PreprocessorManager();
 		ui = new UiApi();
 		ui.addListener(new UiListener());
 		twitter = new TwitterApi();
 		ui.addWordsToLeftPanel(twitter.getKeywords());
+		
 	}
 	
 	
@@ -54,6 +57,8 @@ public class Main {
 			List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
 			List<String> tweetTexts = new ArrayList<>();
 			for (Tweet tweet : tweets) {
+				String text = preprocessor.preprocess(tweet.getText());
+				tweet.setText(text);
 				tweetTexts.add(tweet.getText());
 			}
 			System.out.println("Getting sentiment of " + tweetTexts.size() + " tweets.");

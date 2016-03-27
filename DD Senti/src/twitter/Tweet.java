@@ -80,6 +80,11 @@ public class Tweet {
     }
     
     
+    public void setText(String text) {
+    	this.text = text;
+    }
+    
+    
     public static void main(String[] args) {
 	}
     
