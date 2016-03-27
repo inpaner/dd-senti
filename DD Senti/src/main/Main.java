@@ -1,5 +1,10 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +86,7 @@ public class Main {
 			keywordSets.add(keywordSet);
 		}
 		JsonObject result = jsonBuilder.buildAll(keywordSets);
-		System.out.println(result.toString());
+		jsonBuilder.saveOutput(result);
 	}
 	
 	
