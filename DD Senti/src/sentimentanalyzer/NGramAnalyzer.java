@@ -5,7 +5,7 @@ import java.util.*;
 public class NGramAnalyzer {
 	private List<String> tweets;
 	private final int N = 2;
-	private final int NGRAMS_TO_GET = 10;
+	private final int NGRAMS_TO_GET = 5;
 
 	
 	public NGramAnalyzer(List<String> tweets) {
