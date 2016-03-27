@@ -1,5 +1,10 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import javax.json.Json;
@@ -12,14 +17,13 @@ import twitter.TweetCount;
 import twitter.TweetManager;
 
 class JsonBuilder {
+	private final String OUTPUT_LOCATION = "json/output.json";
 	private final String DATA_KEY = "data";
-	
 	private final String SENTIMENT_KEY = "sentiment";
 	private final String KEYWORD_KEY = "keyword";
 	private final String POSITIVE_KEY = "positive";
 	private final String NEGATIVE_KEY = "negative";
 	private final String NEUTRAL_KEY = "neutral";
-	
 	private final String TWEET_COUNT_KEY = "tweetcount";
 	private final String DATE_KEY = "date";
 	private final String COUNT_KEY = "count";
@@ -66,5 +70,19 @@ class JsonBuilder {
 		JsonObjectBuilder result = Json.createObjectBuilder();
 		result.add(DATA_KEY, keywordSetsArray);
 		return result.build();
+	}
+	
+	
+	void saveOutput(JsonObject json) {
+		String output = json.toString();
+		File file = new File(OUTPUT_LOCATION);
+		Writer writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(output);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
