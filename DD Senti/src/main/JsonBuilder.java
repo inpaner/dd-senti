@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -27,7 +28,9 @@ class JsonBuilder {
 	private final String TWEET_COUNT_KEY = "tweetcount";
 	private final String DATE_KEY = "date";
 	private final String COUNT_KEY = "count";
-	
+	private final String WORDCLOUD_KEY = "wordcloud";
+	private final String TEXT_KEY = "text";
+	private final String WEIGHT_KEY = "weight";
 	
 	public static void main(String[] args) {
 	}
@@ -53,11 +56,26 @@ class JsonBuilder {
 	}
 	
 	
-	JsonObject buildKeywordSet(String keyword, JsonObject sentiment, JsonArray tweetCount) {
+	JsonObject buildKeywordSet(String keyword, JsonObject sentiment, JsonArray tweetCount, JsonArray wordcloud) {
 		JsonObjectBuilder result = Json.createObjectBuilder();
 		result.add(KEYWORD_KEY, keyword);
 		result.add(SENTIMENT_KEY, sentiment);
 		result.add(TWEET_COUNT_KEY, tweetCount);
+		result.add(WORDCLOUD_KEY, wordcloud);
+		return result.build();
+	}
+	
+	
+	JsonArray buildWordcloud(Map<String, Integer> wordcloud) {
+		JsonArrayBuilder result = Json.createArrayBuilder();
+		
+		for (String word : wordcloud.keySet()) {
+			JsonObjectBuilder json = Json.createObjectBuilder();
+			int weight = wordcloud.get(word);
+			json.add(TEXT_KEY, word);
+			json.add(WEIGHT_KEY, weight);
+			result.add(json);
+		}
 		return result.build();
 	}
 	

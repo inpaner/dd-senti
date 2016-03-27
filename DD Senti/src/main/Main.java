@@ -1,16 +1,13 @@
 package main;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
+import sentimentanalyzer.NGramAnalyzer;
 import sentimentanalyzer.SaResult;
 import sentimentanalyzer.SentiAnalyzerApi;
 import sentimentanalyzer.Sentiment;
@@ -24,7 +21,7 @@ public class Main {
 	private SentiAnalyzerApi sa;
 	private UiApi ui;
 	private TwitterApi twitter;
-
+	
 
 	public static void main(String[] args) {
 //		new Main().crawl();
@@ -43,16 +40,16 @@ public class Main {
 		ui = new UiApi();
 		ui.addListener(new UiListener());
 		twitter = new TwitterApi();
-		ui.addWordsToLeftPanel( twitter.getKeywords() );
+		ui.addWordsToLeftPanel(twitter.getKeywords());
 	}
 	
 	
 	private void analyzeWords(List<String> words) {
-		/* Sentiments */
 		System.out.println("Analyzing keywords");
 		JsonBuilder jsonBuilder = new JsonBuilder();
 		List<JsonObject> keywordSets = new ArrayList<>();
 		for (String keyword : words) {
+			/* Sentiments */
 			System.out.println("Analyzing " + keyword);
 			List<Tweet> tweets = twitter.getTweetsByKeyword(keyword);
 			List<String> tweetTexts = new ArrayList<>();
@@ -82,7 +79,12 @@ public class Main {
 			List<TweetCount> tweetCounts = twitter.getTweetCounts(keyword);
 			JsonArray tweetCountArray = jsonBuilder.buildTweetCount(tweetCounts);
 			
-			JsonObject keywordSet = jsonBuilder.buildKeywordSet(keyword, sentimentJson, tweetCountArray);
+			/* Word cloud */
+			NGramAnalyzer ngram = new NGramAnalyzer(tweetTexts);
+			Map<String, Integer> wordcloudMap = ngram.getNgram();
+			JsonArray wordcloudArray = jsonBuilder.buildWordcloud(wordcloudMap);
+			
+			JsonObject keywordSet = jsonBuilder.buildKeywordSet(keyword, sentimentJson, tweetCountArray, wordcloudArray);
 			keywordSets.add(keywordSet);
 		}
 		JsonObject result = jsonBuilder.buildAll(keywordSets);
@@ -100,6 +102,7 @@ public class Main {
 			ui.addWord(word);
 		}
 
+		
 		@Override
 		public void removeWord(String word) {
 			twitter = new TwitterApi();
@@ -113,12 +116,14 @@ public class Main {
 			Main.this.analyzeWords(words);
 		}
 
+		
 		@Override
 		public void crawlWordsOn() {
 			twitter.runCrawler();
 			
 		}
 
+		
 		@Override
 		public void crawlWordOff() {
 			twitter.stopCrawler();
