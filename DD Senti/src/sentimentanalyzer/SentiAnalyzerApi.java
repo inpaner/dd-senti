@@ -18,6 +18,13 @@ public class SentiAnalyzerApi {
 	}
 	
 	
+	public static SentiAnalyzerApi getRenzSa() {
+		SentiAnalyzerApi api = new SentiAnalyzerApi();
+		api.sa = new RenzSa();
+		return api;
+	}
+
+	
 	public static SentiAnalyzerApi getStanfordSa() {
 		SentiAnalyzerApi api = new SentiAnalyzerApi();
 		api.sa = new StanfordSa();
@@ -26,7 +33,7 @@ public class SentiAnalyzerApi {
 	
 
 	public static void main(String[] args) {
-		SentiAnalyzerApi.getAlchemySa().test();
+		SentiAnalyzerApi.getRenzSa().test();
 	}
 	
 	

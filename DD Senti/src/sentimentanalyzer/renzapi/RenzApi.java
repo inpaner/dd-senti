@@ -8,18 +8,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class RenzApi {
-    
     private static Map<String, Double> positiveWords;
     private static Map<String, Double> negativeWords;
+    private double positive;
+    private double negative;
+    private ArrayList<Double> posScoreList = new ArrayList<>();
+    private ArrayList<Double> negScoreList = new ArrayList<>();
+
     
     public RenzApi() {
     	initialize();
     }
     
+    
     private void initialize() {
     	positiveWords = new HashMap<>();
         negativeWords = new HashMap<>();
-        
         
         try {
             Scanner positiveScanner = new Scanner(new File("renzmodel/Positive.txt"));
@@ -48,11 +52,7 @@ public class RenzApi {
         }
     }
     
-    private double positive;
-    private double negative;
-    private ArrayList<Double> posScoreList = new ArrayList<>();
-    private ArrayList<Double> negScoreList = new ArrayList<>();
-
+    
     private void checkWordValue(String word) {
         //Read Line ( [word] [weight / value] )
         boolean wordIsSeenPos = false;
@@ -96,8 +96,7 @@ public class RenzApi {
         negative = getProductNegative();
 
         //System.out.println("Positive: " + positive + " Negative: " + negative);
-        
-        
+            
         if (positive > negative) {
             return 1;
         } else if (positive == negative) {
@@ -107,6 +106,7 @@ public class RenzApi {
         }
     }
 
+    
     public double getProductPositive() {
         double posProduct = 1.0;
         for (int ctr = 0; ctr < posScoreList.size(); ctr++) {
@@ -115,6 +115,7 @@ public class RenzApi {
         return posProduct;
     }
 
+    
     //returns the product of all negative scores
     public double getProductNegative() {
         double negProduct = 1.0;
